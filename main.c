@@ -85,12 +85,16 @@ static int usernet_open(struct inode *inode, struct file *file)
 {
 	struct miscdevice *misc = file->private_data;
 	struct usernet_device *dev = USERNET(misc);
+	unsigned long flags;
 
+	spin_lock_irqsave(&dev->lock, flags);
 	if (netif_carrier_ok(NETDEV(dev))) {
 		dev_warn(misc->this_device, "device has been opened already\n");
+		spin_unlock_irqrestore(&dev->lock, flags);
 		return -EBUSY;
 	}
 	netif_carrier_on(NETDEV(dev));
+	spin_unlock_irqrestore(&dev->lock, flags);
 
 	return 0;
 }
