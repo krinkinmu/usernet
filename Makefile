@@ -11,7 +11,10 @@ KDIR ?= /lib/modules/`uname -r`/build
 default:
 	$(MAKE) -C $(KDIR) M=$$PWD
 
+test: test.c
+	$(CC) test.c -lpthread -o test
+
 clean:
-	rm -rf *.o *.ko *.order *.symvers *.mod.c
+	rm -rf test *.o *.ko *.order *.symvers *.mod.c
 
 endif
