@@ -168,7 +168,9 @@ static ssize_t usernet_write(struct file *filep, const char __user *data,
 	skb->ip_summed = CHECKSUM_NONE;
 	dev->stats.rx_packets++;
 	dev->stats.rx_bytes += size;
-	netif_rx(skb);
+
+	if (NET_RX_DROP == netif_rx(skb))
+		netdev_warn(netdev, "packet was dropped\n");
 
 	return size;
 }
@@ -270,6 +272,7 @@ static void usernet_netdev_init(struct net_device *dev)
 	ether_setup(dev);
 	dev->watchdog_timeo = timeout;
 	dev->netdev_ops = &usernet_netdev_ops;
+	dev->flags |= IFF_NOARP;
 	netif_carrier_off(dev);
 }
 
