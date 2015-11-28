@@ -212,15 +212,15 @@ static netdev_tx_t usernet_netdev_start_xmit(struct sk_buff *skb,
 
 	memcpy(pkt->data, skb->data, skb->len);
 	pkt->len = skb->len;
+	dev->trans_start = jiffies;
+	priv->stats.tx_packets++;
+	priv->stats.tx_bytes = skb->len;
+
 	dev_kfree_skb_any(skb);
 
 	spin_lock_irqsave(&priv->lock, flags);
 	list_add_tail(&pkt->head, &priv->sent);
 	spin_unlock_irqrestore(&priv->lock, flags);
-
-	dev->trans_start = jiffies;
-	priv->stats.tx_packets++;
-	priv->stats.tx_bytes = skb->len;
 
 	return NETDEV_TX_OK;
 
