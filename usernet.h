@@ -10,6 +10,7 @@
 
 #define USERNET_DEVICES     2
 #define USERNET_TIMEOUT     5
+#define USERNET_POOLSIZE    8
 
 struct usernet_device {
 	struct miscdevice misc;

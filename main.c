@@ -14,7 +14,7 @@
 static int timeout = USERNET_TIMEOUT;
 module_param(timeout, int, 0);
 
-static int poolsize = 8;
+static int poolsize = USERNET_POOLSIZE;
 module_param(poolsize, int, 0);
 
 
